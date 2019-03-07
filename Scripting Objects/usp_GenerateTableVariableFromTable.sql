@@ -2,7 +2,7 @@ Create   proc [dbo].[usp_GenerateTableVariableFromTable] (@TableName varchar(255
 as
 	/*
 		Author: Jonathan Bairstow
-		Created: 05/03/2019
+		Created: 28/02/2019
 
 		Description:
 		Creates a table variable definition to match a source table. This is useful when writing staging procedures with
