@@ -9,7 +9,7 @@
 
 		Usage:
 		The body of the script should not be modified. Modify only the section starting 
-		"Update data here" and ending "Update data End"
+		"Configuration" and ending "Configuration End"
 
 		Definitions:
 		@FolderName - This is the Name of the folder in which the project which will 
@@ -49,7 +49,7 @@ Declare	@Variables table
 		)
 
 
-/***************** Update data here *******************/
+/***************** Configuration *******************/
 
 	Declare	@FolderName varchar(128) = 'SolutionName',
 			@ProjectName varchar(128) = 'Test',
@@ -57,11 +57,12 @@ Declare	@Variables table
 	;
 
 	insert	@Variables values ('Parameter', 'VariableName', N'String', N'VariableValue', 0, null)
-	insert	@Variables values ('Connection', 'MyDatabase', N'String', N'Data Source=DESKTOP-09BT47P\SQL2017;Initial Catalog=BulltechAudit;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;', 0, 'Package.dtsx')
-	--insert	@Variables values ('Connection', 'MyDatabase', N'String', N'Data Source=Server\Instance;Initial Catalog=DatabaseName;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;', 0, null)
+	insert	@Variables values ('Connection', 'MyDatabase', N'String', N'Data Source=Server\Instance;Initial Catalog=DatabaseName;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;', 0, 'Package.dtsx')
 
 
-/***************** Update data End *******************/
+
+
+/***************** Configuration End *******************/
 
 
 
