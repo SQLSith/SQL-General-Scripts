@@ -57,8 +57,7 @@ Declare	@Variables table
 	;
 
 	insert	@Variables values ('Parameter', 'VariableName', N'String', N'VariableValue', 0, null)
-	insert	@Variables values ('Connection', 'MyDatabase', N'String', N'Data Source=DESKTOP-09BT47P\SQL2017;Initial Catalog=BulltechAudit;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;', 0, 'Package.dtsx')
-	--insert	@Variables values ('Connection', 'MyDatabase', N'String', N'Data Source=Server\Instance;Initial Catalog=DatabaseName;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;', 0, null)
+	insert	@Variables values ('Connection', 'MyDatabase', N'String', N'Data Source=Server\Instance;Initial Catalog=DatabaseName;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;', 0, null)
 
 
 /***************** Update data End *******************/
