@@ -27,7 +27,8 @@
 			VariableValue   The value to assign to the environment variable.
 			PackageName     A Package name. If supplied then the package is configured to use the 
 						    environment variable. If omitted the project is configured to use the environment variable.
-
+		To Do:
+		* Accommodate Projects and Environments in different folders 
 */
 
 
@@ -41,7 +42,7 @@ Declare	@Variables table
 		VariableID int identity(1,1) not null,
 		UsageType	varchar(50) check (UsageType in ('Connection', 'Parameter')) not null,
 		VariableName varchar(125) not null,
-		VariableType varchar(50) check (VariableName in ('Boolean', 'Byte', 'DateTime', 'Double', 'Int16', 'Int32', 'Int64', 'Single', 'String', 'UInt32', 'UInt64')) not null,
+		VariableType varchar(50) check (VariableType in ('Boolean', 'Byte', 'DateTime', 'Double', 'Int16', 'Int32', 'Int64', 'Single', 'String', 'UInt32', 'UInt64')) not null,
 		VariableValue sql_Variant not null, 
 		VariableSensitive bit not null,
 		PackageName varchar(255) null
@@ -56,7 +57,8 @@ Declare	@Variables table
 	;
 
 	insert	@Variables values ('Parameter', 'VariableName', N'String', N'VariableValue', 0, null)
-	insert	@Variables values ('Connection', 'MyDatabase', N'String', N'Data Source=Server\Instance;Initial Catalog=DatabaseName;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;', 0, null)
+	insert	@Variables values ('Connection', 'MyDatabase', N'String', N'Data Source=DESKTOP-09BT47P\SQL2017;Initial Catalog=BulltechAudit;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;', 0, 'Package.dtsx')
+	--insert	@Variables values ('Connection', 'MyDatabase', N'String', N'Data Source=Server\Instance;Initial Catalog=DatabaseName;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;', 0, null)
 
 
 /***************** Update data End *******************/
