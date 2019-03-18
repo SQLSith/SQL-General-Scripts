@@ -60,8 +60,6 @@ Declare	@Variables table
 	insert	@Variables values ('Connection', 'MyDatabase', N'String', N'Data Source=Server\Instance;Initial Catalog=DatabaseName;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;', 0, 'Package.dtsx')
 
 
-
-
 /***************** Configuration End *******************/
 
 
