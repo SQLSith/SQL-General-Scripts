@@ -13,7 +13,7 @@ as
 	;
 
 	Select	@ObjectName = parsename(@ObjectNameFull, 1),
-			@ObjectSchema = isnull(parsename(@ObjectNameFull, 2), SCHEMA_NAME()), -- Defualt to connected users default schema
+			@ObjectSchema = isnull(parsename(@ObjectNameFull, 2), SCHEMA_NAME()), -- Default to connected users default schema
 			@ObjectID = object_id(@ObjectNameFull),
 			@SchemaID = schema_id(isnull(parsename(@ObjectNameFull, 2), SCHEMA_NAME()))
 		
