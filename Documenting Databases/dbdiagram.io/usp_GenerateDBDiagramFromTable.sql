@@ -42,7 +42,7 @@ as
 	where	c.table_name =  parsename(@TableName, 1)
 	and		c.TABLE_SCHEMA = parsename(@TableName, 2)
 
-	Select	@SQLCreateTableVar = 'Table ' + parsename(@TableName, 1) + ' {' + char(10)
+	Select	@SQLCreateTableVar = 'Table "' + parsename(@TableName, 2) + '.' + parsename(@TableName, 1) + '" {' + char(10)
 		+ cast((Select rtrim(DeclareScript) from @Metadata order by ORDINALPOSITION for XML path(''), type) as varchar(max))
 		+ char(10) + '}'
 
