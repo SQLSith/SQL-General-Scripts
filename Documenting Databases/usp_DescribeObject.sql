@@ -1,5 +1,23 @@
-Create or alter procedure usp_DescribeObject (@ObjectNameFull varchar(255))
+Create or alter procedure dbo.usp_DescribeObject (@ObjectNameFull varchar(255))
 as
+	/*
+		Author: Jonathan Bairstow
+		Created: 13/05/2018
+		Description:
+		Produces datasets that describe the supplied object. Currently supports:
+			* Tables
+			* Views
+			* Scalar functions
+			* Table valued functions
+			* Inline Table Valued functions
+			* Synonyms
+			* Sequences
+			* Triggers
+
+		Usage:
+		exec [dbo].[usp_DescribeObject] '[SchemaName].[TableName]'
+	*/
+
 
 -- Gather Object Metadata
 	Declare	@ObjectName varchar(128),
