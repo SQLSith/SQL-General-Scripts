@@ -7,8 +7,25 @@
 		Unfortunately viewing and manipulating them is far from user friendly. This is the first of a number of scripts
 		which present extended properties as views, with triggers allowing changes to be applied directly to the view.
 
+		Currently supports:
+			* Tables
+			* Views
+			* Stored Procedures
+			* Functions
+
 		Usage:
-		exec [dbo].[usp_GenerateTablePopulationScript] '[SchemaName].[TableName]'
+		Select * from [ExtendedProperties].[DatabaseObjects]
+
+		Insert	[ExtendedProperties].[DatabaseObjects] (SchemaName, ObjectName, PropertyName, PropertyValue) 
+		values ('ExtendedProperties','DatabaseObjects','Author', 'Jonathan Bairstow (Bulltech Solutions Ltd)')
+
+		Update [ExtendedProperties].[DatabaseObjects]
+		Set		PropertyValue = 'Jonathan Bairstow (Bulltech Solutions Ltd)'
+		where	SchemaName = 'ExtendedProperties'
+
+		Delete [ExtendedProperties].[DatabaseObjects]
+		Where	PropertyValue is null
+
 
 	*/
 
@@ -20,6 +37,35 @@
 -- Create View representing database objects
 	Create   View [ExtendedProperties].[DatabaseObjects]
 	as
+	/*
+		Author: Jonathan Bairstow (Bulltech Solutions Ltd)
+		Created: 16/06/2019
+
+		Description:
+		Extend Properties can be very useful for self documenting databases, but also to drive automated processes.
+		Unfortunately viewing and manipulating them is far from user friendly. This is the first of a number of scripts
+		which present extended properties as views, with triggers allowing changes to be applied directly to the view.
+
+		Currently supports:
+			* Tables
+			* Views
+			* Stored Procedures
+			* Functions
+
+		Usage:
+		Select * from [ExtendedProperties].[DatabaseObjects]
+
+		Insert	[ExtendedProperties].[DatabaseObjects] (SchemaName, ObjectName, PropertyName, PropertyValue) 
+		values ('ExtendedProperties','DatabaseObjects','Author', 'Jonathan Bairstow (Bulltech Solutions Ltd)')
+
+		Update [ExtendedProperties].[DatabaseObjects]
+		Set		PropertyValue = 'Jonathan Bairstow (Bulltech Solutions Ltd)'
+		where	SchemaName = 'ExtendedProperties'
+
+		Delete [ExtendedProperties].[DatabaseObjects]
+		Where	PropertyValue is null
+	*/
+
 	Select	OBJECT_SCHEMA_NAME(major_id, db_id()) SchemaName,
 			object_name(major_id) ObjectName,
 			o.type_desc ObjectType,
@@ -33,13 +79,24 @@
 	GO
 
 
-
 -- Create Trigger of inserts
 
 	CREATE  Trigger [ExtendedProperties].[EPDatabaseObjectsAdd]
 	on [ExtendedProperties].[DatabaseObjects]
 	Instead of Insert
 	as
+		/*
+		Author: Jonathan Bairstow (Bulltech Solutions Ltd)
+		Created: 16/06/2019
+
+		Description:
+		Extend Properties can be very useful for self documenting databases, but also to drive automated processes.
+		Unfortunately viewing and manipulating them is far from user friendly. This is the first of a number of scripts
+		which present extended properties as views, with triggers allowing changes to be applied directly to the view.
+		*/
+
+		Set Nocount on
+		;
 
 		Declare	@RowCount int,
 				@RowCurrent int = 1,
@@ -123,6 +180,18 @@
 	on [ExtendedProperties].[DatabaseObjects]
 	Instead of Update
 	as
+		/*
+		Author: Jonathan Bairstow (Bulltech Solutions Ltd)
+		Created: 16/06/2019
+
+		Description:
+		Extend Properties can be very useful for self documenting databases, but also to drive automated processes.
+		Unfortunately viewing and manipulating them is far from user friendly. This is the first of a number of scripts
+		which present extended properties as views, with triggers allowing changes to be applied directly to the view.
+		*/
+
+		Set Nocount on
+		;
 
 		Declare	@RowCount int,
 				@RowCurrent int = 1,
@@ -200,14 +269,24 @@
 	GO
 
 
-
-
 -- Create Trigger for Deletes
 
 	CREATE  Trigger [ExtendedProperties].[EPDatabaseObjectsDrop]
 	on [ExtendedProperties].[DatabaseObjects]
 	Instead of Delete
 	as
+		/*
+		Author: Jonathan Bairstow (Bulltech Solutions Ltd)
+		Created: 16/06/2019
+
+		Description:
+		Extend Properties can be very useful for self documenting databases, but also to drive automated processes.
+		Unfortunately viewing and manipulating them is far from user friendly. This is the first of a number of scripts
+		which present extended properties as views, with triggers allowing changes to be applied directly to the view.
+		*/
+
+		Set Nocount on
+		;
 
 		Declare	@RowCount int,
 				@RowCurrent int = 1,
@@ -282,4 +361,9 @@
 	GO
 
 
+-- Add first Extended Property
+
+	Insert	[ExtendedProperties].[DatabaseObjects] (SchemaName, ObjectName, PropertyName, PropertyValue) 
+	values ('ExtendedProperties','DatabaseObjects','Author', 'Jonathan Bairstow (Bulltech Solutions Ltd)')
+	go
 
