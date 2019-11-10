@@ -3,7 +3,7 @@
 		Created: 10/11/2019
 
 		Description:
-		This script demostrates k-means clustering using standard SQL and batch processing.
+		This script demostrates k-median clustering using standard SQL and batch processing.
 
 
 */
@@ -17,6 +17,7 @@ go
 	Set		[ClosestCentroid] = null,
 			[ClosestCentroidDist] = null
 	go
+
 
 /* Create the tables required for the clustering */
 	Drop table if exists dbo.Centroid
@@ -41,16 +42,30 @@ go
 	)
 	go
 
+	Drop table if exists dbo.MedianSeriesX
 
+	Create table dbo.MedianSeriesX
+	(
+	ClosestCentroid int,
+	EventNumberX decimal(9,6)
+	)
+	go
+
+	Drop table if exists dbo.MedianSeriesY
+
+	Create table dbo.MedianSeriesY
+	(
+	ClosestCentroid int,
+	EventNumberY decimal(9,6)
+	)
+	go
 
 /* Randomly place 4 data points to be our starting points for cluster centers */
-
 	insert	dbo.Centroid (CentroidX, CentroidY)
 	Select	min(EventNumberX) + (rand(checksum(newID())) * (max(EventNumberX) - min(EventNumberX))),
 			min(EventNumberY) + (rand(checksum(newID())) * (max(EventNumberY) - min(EventNumberY)))
 	from dbo.Events
 	go 4
-
 
 
 
@@ -88,6 +103,7 @@ go
 				row_number() over (partition by EventID order by sqrt(square(EventNumberX - CentroidX) + square(EventNumberY - CentroidY))) rw
 		from	dbo.Events e
 		cross join	dbo.Centroid c
+		;
 
 	-- Assign each event to its closest cluster centre
 		Update e
@@ -103,15 +119,50 @@ go
 
 		Truncate table dbo.Centroid
 		Truncate table dbo.CentroidAssignment
+		Truncate table dbo.MedianSeriesX
+		Truncate table dbo.MedianSeriesY
 
-	-- Move the cluster centres to the average location of linked events
-		insert dbo.Centroid (CentroidX, CentroidY)
-		Select	avg(EventNumberX * 1.00),
-				avg(EventNumberY * 1.00)
-		from	dbo.Events
+	-- Identify the X axis median for each cluster
+		; With Series as (
+		Select	EventID,
+				EventNumberX, 
+				ClosestCentroid,
+				row_number() over (partition by ClosestCentroid order by EventNumberX asc, EventID asc) RowAsc, -- Inclusion of the EventID forces an order and eliminates the chance of ties meaning no results returned
+				row_number() over (partition by ClosestCentroid order by EventNumberX desc, EventID desc) RowDesc
+		FROM dbo.Events
+		)
+		insert	dbo.MedianSeriesX
+		Select	ClosestCentroid, 
+				Avg(EventNumberX) EventNumberX
+		from	Series 
+		where RowAsc in (RowDesc, RowDesc - 1, RowDesc + 1)
 		group by ClosestCentroid
-		order by avg(EventNumberX * 1.00),
-				avg(EventNumberY * 1.00)
+		;
+
+	-- Identify the Y axis median for each cluster
+		; With Series as (
+		Select	EventNumberY, 
+				ClosestCentroid,
+				row_number() over (partition by ClosestCentroid order by EventNumberY asc, EventID asc) RowAsc,
+				row_number() over (partition by ClosestCentroid order by EventNumberY desc, EventID desc) RowDesc
+		FROM dbo.Events
+		)
+		insert	dbo.MedianSeriesY
+		Select	ClosestCentroid, 
+				Avg(EventNumberY) EventNumberY
+		from	Series where RowAsc in (RowDesc, RowDesc - 1, RowDesc + 1)
+		group by ClosestCentroid
+		;
+
+
+	-- Move the cluster centres to the median location of linked events
+		insert dbo.Centroid (CentroidX, CentroidY)
+		Select	x.EventNumberX,
+				y.EventNumberY
+		from	dbo.MedianSeriesX x
+		join	dbo.MedianSeriesY y	on	x.ClosestCentroid = y.ClosestCentroid
+		order by x.EventNumberX,
+				y.EventNumberY
 		;
 
 	-- Determine whether any cluster centres have moved

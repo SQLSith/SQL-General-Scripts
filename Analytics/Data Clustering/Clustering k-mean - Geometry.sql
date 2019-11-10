@@ -55,7 +55,7 @@ go
 
 
 /* Create process variables anc configurations */
-	Declare @MaximumIterations int = 0, -- How many iterations to perform. Decreasing this number
+	Declare @MaximumIterations int = 10, -- How many iterations to perform. Decreasing this number
 										-- will cap the number of iterations that are attempted. 
 										-- The lower the number; the faster the completion but the lower the accuracy.
 										-- The higher the number; the longer the process may run, but teh higher the potential accuracy.
@@ -75,7 +75,7 @@ go
 */
 
 
-	While @Iteration <= 10 and @Unchanged = 0
+	While @Iteration <= @MaximumIterations and @Unchanged = 0
 	begin
 
 		Select @Iteration = @Iteration + 1
@@ -127,7 +127,7 @@ go
 
 /* Summarise clusters */
 
--- Display the number of completed iterations, including a possible final iterationt to determine whether furster refinement possible.
+-- Display the number of completed iterations, including a possible final iteration to determine whether furster refinement possible.
 	Select @Iteration IterationsCompleted
 
 -- Display the X,Y range of each cluster.
