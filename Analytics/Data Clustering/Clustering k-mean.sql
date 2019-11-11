@@ -5,6 +5,8 @@
 		Description:
 		This script demostrates k-means clustering using standard SQL and batch processing.
 
+		This demo is designed to work with sample data create with 'Create Sample Data 1.sql'
+
 
 */
 
